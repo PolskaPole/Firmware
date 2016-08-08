@@ -97,6 +97,7 @@ MultirotorMixer::MultirotorMixer(ControlCallback control_cb,
 
 MultirotorMixer::~MultirotorMixer()
 {
+	delete _rotors;
 }
 
 MultirotorMixer *
