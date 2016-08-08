@@ -51,6 +51,7 @@
 #include <math.h>
 
 #include <px4iofirmware/protocol.h>
+#include <drivers/drv_pwm_output.h>
 
 #include "mixer.h"
 
@@ -368,7 +369,23 @@ MultirotorMixer::mix(float *outputs, unsigned space, uint16_t *status_reg)
 			outputs[i] = -(1.0f - _thrust_factor) / (2.0f * _thrust_factor) + sqrtf((1.0f - _thrust_factor) * (1.0f - _thrust_factor) / (4.0f * _thrust_factor) + (outputs[i] < 0.0f ? 0.0f : outputs[i]));
 		}
 		outputs[i] = constrain(_idle_speed + (outputs[i] * (1.0f - _idle_speed)), _idle_speed, 1.0f);
+
 	}
+
+	// /* apply slew rate limiting for each motor*/
+	// float d_pwm_max = 200;	// max allowed delta pwm between to iterations
+
+	// for (unsigned i = 0; i < _rotor_count; i++) {
+	// 	float pwm_diff = (outputs[i] - _outputs_prev[i]) * pwm_range / 2.0f;
+	// 	if (pwm_diff / dt > d_pwm_max) {
+	// 		outputs[i] = _outputs_prev[i] + d_pwm_max;
+	// 	} else if (pwm_diff / dt < -d_pwm_max) {
+	// 		outputs[i] = _outputs_prev[i] - d_pwm_max * dt;
+	// 	}
+	// 	_outputs_prev[i] = outputs[i];
+	// }
+
+
 
 	return _rotor_count;
 }
