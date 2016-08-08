@@ -89,6 +89,7 @@ MultirotorMixer::MultirotorMixer(ControlCallback control_cb,
 	_pitch_scale(pitch_scale),
 	_yaw_scale(yaw_scale),
 	_idle_speed(-1.0f + idle_speed * 2.0f),	/* shift to output range here to avoid runtime calculation */
+	_thrust_factor(0.0f),
 	_limits_pub(),
 	_rotor_count(_config_rotor_count[(MultirotorGeometryUnderlyingType)geometry]),
 	_rotors(_config_index[(MultirotorGeometryUnderlyingType)geometry])
@@ -363,6 +364,9 @@ MultirotorMixer::mix(float *outputs, unsigned space, uint16_t *status_reg)
 			     yaw * _rotors[i].yaw_scale +
 			     thrust + boost;
 
+		if (_thrust_factor > 0.0f) {
+			outputs[i] = -(1.0f - _thrust_factor) / (2.0f * _thrust_factor) + sqrtf((1.0f - _thrust_factor) * (1.0f - _thrust_factor) / (4.0f * _thrust_factor) + (outputs[i] < 0.0f ? 0.0f : outputs[i]));
+		}
 		outputs[i] = constrain(_idle_speed + (outputs[i] * (1.0f - _idle_speed)), _idle_speed, 1.0f);
 	}
 

@@ -233,7 +233,7 @@ mixer_tick(void)
 		unsigned mixed;
 
 		/* mix */
-
+		mixer_group.set_thrust_factor(REG_TO_FLOAT(r_setup_thr_fac));
 		/* poor mans mutex */
 		in_mixer = true;
 		mixed = mixer_group.mix(&outputs[0], PX4IO_SERVO_COUNT, &r_mixer_limits);

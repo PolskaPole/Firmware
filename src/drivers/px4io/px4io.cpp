@@ -1245,6 +1245,22 @@ PX4IO::task_main()
 					}
 				}
 
+				/* maximum motor pwm slew rate */
+				parm_handle = param_find("MOT_SLEW_MAX");
+
+				if (parm_handle != PARAM_INVALID) {
+					param_get(parm_handle, &param_val);
+					(void)io_reg_set(PX4IO_PAGE_SETUP, PX4IO_P_SETUP_MOTOR_SLEW_MAX, FLOAT_TO_REG(param_val));
+				}
+
+				/* thrust to pwm modelling factor */
+				parm_handle = param_find("THR_MDL_FAC");
+
+				if (parm_handle != PARAM_INVALID) {
+					param_get(parm_handle, &param_val);
+					(void)io_reg_set(PX4IO_PAGE_SETUP, PX4IO_P_SETUP_THR_MDL_FAC, FLOAT_TO_REG(param_val));
+				}
+
 				// Also trigger param update in Battery instance.
 				_battery.updateParams();
 			}
