@@ -148,6 +148,8 @@ struct sys_state_s {
 
 extern struct sys_state_s system_state;
 
+extern float dt;
+
 /*
  * PWM limit structure
  */
